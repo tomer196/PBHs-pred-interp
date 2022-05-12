@@ -1,0 +1,5 @@
+data/*xyzs*
+data/*.pickle
+cache
+summary
+__pycache__
