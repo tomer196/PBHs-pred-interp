@@ -1,7 +1,10 @@
 # PBHs prediction and Interpretability
 Interpretable deep learning was used to identify structure-property relationships governing the HOMO-LUMO gap and relative stability of polybenzenoid hydrocarbons (PBHs). To this end, a ring-based graph representation was used. In addition to affording reduced training times and excellent predictive ability, this representation could be combined with a subunit-based perception of PBHs, allowing chemical insights to be presented in terms of intuitive and simple structural motifs. The resulting insights agree with conventional organic chemistry knowledge and electronic-structure based analyses, and also reveal new behaviors and identify influential structural motifs. In particular, we evaluated and compared the effects of linear, angular, and branching motifs on these two molecular properties, as well as explored the role of dispersion in mitigating torsional strain inherent in non-planar PBHs. Hence, the observed regularities and the proposed analysis  contribute to a deeper understanding of the behavior of PBHs and form the foundation for design strategies for new functional PBHs. 
 
-![Interpretability example](interp-example.pdf)
+<p align="center">
+<img src="https://github.com/tomer196/PBHs-pred-interp/blob/main/Interp-example.png" width="400" >
+</p>
+
 ## preparations
 1. Download repo.  
 2. Download dataset (`csv` + `xyz`s) from [COMPAS](https://gitlab.com/porannegroup/compas)
