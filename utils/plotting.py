@@ -80,6 +80,53 @@ def moldraw(ax, _molrepr, _edges, plot_h=False):
 
     return None
 
+def moldraw2(ax, _molrepr, _edges, xm, Vt, plot_h=False):
+    """
+    moldraw(ax, _molrepr: Mol Object, _edges: list)
+
+    Function that draws the molecule.
+
+    in:
+    _molrepr: Mol Object containing XYZ data.
+    _edges: list of tuples containing the indices of 2 atoms bonding.
+
+    """
+
+    atom_colors = {'H':'silver','N':'blue','O':'red','S':'goldenrod','B':'green'}
+
+    # set aspect of subplot
+    ax.set_aspect('equal')
+    ax.axis('off')
+    x = _molrepr.get_coord()[:,:2]
+    xr = (x - xm) @ Vt.T
+
+    # plot molecule
+    for edge in _edges:
+        bond = []
+        Hbond = False
+        for atom_idx in edge:
+            for atom in _molrepr.atoms:
+                if atom_idx == atom.index:
+                    bond.append(atom)
+                    if atom.element != 'C':
+                        if atom.element == 'BH':
+                            atom.element = 'B'
+                        elif atom.element == 'H':
+                            Hbond = True
+                        if Hbond and not plot_h:
+                            continue
+                        ax.text(xr[atom_idx, 0], xr[atom_idx, 1], atom.element, ha='center', va='center', color=atom_colors[atom.element],
+                                zorder=2, bbox=dict(facecolor='white', edgecolor='none', boxstyle='circle, pad=0.1'))
+        x = [xr[atom.index, 0] for atom in bond]
+        y = [xr[atom.index, 1] for atom in bond]
+        if Hbond:
+            if plot_h:
+                ax.plot(x, y, c=atom_colors['H'], linestyle='-', zorder=0)
+        else:
+            ax.plot(x, y, c='black', linestyle='-', zorder=1)
+
+    return None
+
 def plot_compare(pred, gt, args, title=''):
     # gt = np.concatenate([gt[:1405], gt[1406:]])
     # pred = np.concatenate([pred[:1405], pred[1406:]])
@@ -155,4 +202,26 @@ def plot_graph(g, title='', ax=None):
         ax.plot(x[edge, 0], x[edge, 1], c='black')
     ax.set_title(f'{title}')
     plt.show()
+    return ax
+
+def plot_graph_weight(g, mol, edges, w, title='', ax=None, size=3000):
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=(10, 12))
+    plt.rcParams.update({'font.size': 12})
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+    x = g.ndata['x'].detach().cpu().numpy()
+    x, xm, Vt = align_to_x_plane(x)
+    w_scaled = w/ np.abs(w).max()
+    ax.scatter(x[:, 0], x[:, 1], s=size, c=w_scaled, alpha=0.5,
+               cmap='coolwarm', vmin=-1, vmax=1)
+    for i in range(w.shape[0]):
+        ax.annotate(f'{w[i]:.3f}', (x[i, 0], x[i, 1]),
+                    ha='center', va='center')
+
+    # plot molecule
+    moldraw2(ax, mol, edges, xm, Vt)
+
+    # ax.set_title(f'{title}')
     return ax

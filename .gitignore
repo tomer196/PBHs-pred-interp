@@ -1,5 +1,6 @@
 data/*xyzs*
 data/*.pickle
+.idea/
 cache
 summary
 __pycache__
