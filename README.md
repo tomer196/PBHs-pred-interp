@@ -5,13 +5,18 @@ Interpretable deep learning was used to identify structure-property relationship
 <img src="https://github.com/tomer196/PBHs-pred-interp/blob/main/Interp-example.png" width="400" >
 </p>
 
-## preparations
-1. Download repo.  
+## Setup
+1. Clone this repository by invoking
+```
+git clone https://github.com/tomer196/PBHs-pred-interp.git
+```
 2. Download dataset (`csv` + `xyz`s) from [COMPAS](https://gitlab.com/porannegroup/compas)
 3. Update `csv` + `xyz`s paths in `utiles/args.py`
-4. Install conda environment according to the instruction below
-
-## Dependencies
+4. Install conda environment. The environment can be installed using the `environment.yml` by invoking
+```
+conda env create -n PBHs --file environment.yml
+```
+Alternatively, dependencies can be installed manually as follows:
 ```
 conda create -n PBHs python=3.8
 conda activate PBHs
