@@ -148,6 +148,9 @@ class AromaticDataset(Dataset):
         # plot_graph(G)
         return G, y
 
+    def unnormalize(self, x):
+        return x * self.std.to(x.device) + self.mean.to(x.device)
+
     def __getitem__(self, idx):
         index = self.examples[idx]
         df_row = self.df.loc[index]

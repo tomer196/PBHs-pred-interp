@@ -1,7 +1,5 @@
 import json
 import os
-import matplotlib
-
 import matplotlib.pyplot as plt
 
 from data.aromatic_dataloader import create_data_loaders
@@ -15,7 +13,6 @@ from utils.args import Args
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-import numpy as np
 import torch
 
 
@@ -47,8 +44,11 @@ def interpretation(model, dataloader, args):
     ]
 
     df = dataloader.dataset.df_all
+    dir_name = f'{args.exp_dir}/interp-{args.target_features}'
+    try_mkdir(dir_name)
+
     for i, name in enumerate(names):
-        pdf_filename = f'{args.exp_dir}/interp-{args.target_features}/{args.target_features}-{name}.pdf'
+        pdf_filename = f'{dir_name}/{args.target_features}-{name}.pdf'
         if os.path.isfile(pdf_filename):
             print(i)
             continue
