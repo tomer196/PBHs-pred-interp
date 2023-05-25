@@ -1,5 +1,6 @@
 import sys
 import random
+from pathlib import Path
 from time import time
 from typing import Tuple
 
@@ -12,6 +13,7 @@ from torch.utils.data import Dataset, DataLoader
 from torch.nn.functional import one_hot
 
 from data.mol import load_xyz, Mol
+from se3_transformer.utils.utils_logging import try_mkdir
 from utils.args import Args
 from utils.knotgraph import get_knots, get_knots_connectivity
 from utils.molgraph import get_connectivity_matrix, get_edges
@@ -106,7 +108,7 @@ class AromaticDataset(Dataset):
 
         # creation of nodes, edges and there features
         if self.rings_graph:
-            preprocessed_path = self.xyz_root + "_rings_preprocessed/" + name + ".xyz"
+            preprocessed_path = self.xyz_root + "_rings_preprocessed/" +df_row.name + ".xyz"
             try_mkdir(self.xyz_root + "_rings_preprocessed/")
             if Path(preprocessed_path).is_file():
                 x, edges, nodes_features, edge_features = torch.load(preprocessed_path)
