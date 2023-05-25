@@ -106,17 +106,24 @@ class AromaticDataset(Dataset):
 
         # creation of nodes, edges and there features
         if self.rings_graph:
-            mol_graph = nx.Graph(edges)
-            knots = get_knots(mol.atoms, mol_graph)
-            edges = get_knots_connectivity(knots)
-            x = torch.tensor([k.get_coord() for k in knots], dtype=DTYPE)
-            knot_type = torch.tensor([KNOTS_LIST.index(k.cycle_type) for k in knots]).unsqueeze(1)
-            nodes_features = one_hot(knot_type, num_classes=len(KNOTS_LIST)).permute(0, 2, 1).float()
-            edges = torch.tensor(edges, dtype=DTYPE).view(-1, 2)
-            edges = torch.cat([edges, edges[:, [1, 0]]], 0)
-            if edges.shape[0] == 0:
-                edges = torch.zeros(1, 2)
-            edge_features = torch.ones(edges.shape[0], 1)  # null features
+            preprocessed_path = self.xyz_root + "_rings_preprocessed/" + name + ".xyz"
+            try_mkdir(self.xyz_root + "_rings_preprocessed/")
+            if Path(preprocessed_path).is_file():
+                x, edges, nodes_features, edge_features = torch.load(preprocessed_path)
+            else:
+                mol, edges, _ = self.get_mol(df_row)
+                mol_graph = nx.Graph(edges)
+                knots = get_knots(mol.atoms, mol_graph)
+                edges = get_knots_connectivity(knots)
+                x = torch.tensor([k.get_coord() for k in knots], dtype=DTYPE)
+                knot_type = torch.tensor([KNOTS_LIST.index(k.cycle_type) for k in knots]).unsqueeze(1)
+                nodes_features = one_hot(knot_type, num_classes=len(KNOTS_LIST)).permute(0, 2, 1).float()
+                edges = torch.tensor(edges, dtype=DTYPE).view(-1, 2)
+                edges = torch.cat([edges, edges[:, [1, 0]]], 0)
+                if edges.shape[0] == 0:
+                    edges = torch.zeros(1, 2)
+                edge_features = torch.ones(edges.shape[0], 1)  # null features
+                torch.save([x, edges, nodes_features, edge_features], preprocessed_path)
 
         else:  # atoms graph
             x = torch.tensor([a.get_coord() for a in mol.atoms], dtype=DTYPE)
