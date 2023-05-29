@@ -20,7 +20,7 @@ def get_figure(_molrepr, _edges, filename=None, showPlot=False):
     # set parameters
     plt.rcParams.update({'font.size': 22})
 
-    fig, ax = plt.subplots(1, 1, figsize=(10,12))
+    fig, ax = plt.subplots(1, 1, figsize=(6,8))
 
     # plot scan and molecule with path
     moldraw(ax, _molrepr, _edges)

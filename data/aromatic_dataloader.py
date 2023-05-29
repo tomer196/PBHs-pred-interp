@@ -105,10 +105,13 @@ class AromaticDataset(Dataset):
 
         mol, edges, _ = self.get_mol(df_row)
         # get_figure(mol, edges, showPlot=True)
-
+        try:
+            name = df_row['name']
+        except:
+            name = df_row['molecule']
         # creation of nodes, edges and there features
         if self.rings_graph:
-            preprocessed_path = self.xyz_root + "_rings_preprocessed/" + df_row['name'] + ".xyz"
+            preprocessed_path = self.xyz_root + "_rings_preprocessed/" + name + ".xyz"
             try_mkdir(self.xyz_root + "_rings_preprocessed/")
             if Path(preprocessed_path).is_file():
                 x, edges, nodes_features, edge_features = torch.load(preprocessed_path)
