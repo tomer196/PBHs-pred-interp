@@ -1,17 +1,10 @@
-import pickle
 
-import dgl
 import torch
-import torch.nn.functional as F
 import numpy as np
 import matplotlib.pyplot as plt
-from torch import nn, Tensor
-
-from data.mol import Mol
-from utils.plotting import plot_graph_weight, plot_attention
 
 
-def grad_ram(final_conv_acts, final_conv_grads, normalize=True):
+def grad_ram(final_conv_acts, final_conv_grads, normalize=False):
     node_heat_map = []
     alphas = torch.mean(final_conv_grads, axis=0) # mean gradient for each feature (512x1)
     for n in range(final_conv_acts.shape[0]): # nth node
@@ -21,7 +14,6 @@ def grad_ram(final_conv_acts, final_conv_grads, normalize=True):
     if normalize:
         node_heat_map = node_heat_map / np.abs(node_heat_map).max()
     return node_heat_map
-
 
 def align_manual(x, rotation_angle):
     rotation_angle = np.deg2rad(rotation_angle)
