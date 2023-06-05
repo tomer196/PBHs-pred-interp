@@ -5,6 +5,9 @@ Interpretable deep learning was used to identify structure-property relationship
 <img src="https://github.com/tomer196/PBHs-pred-interp/blob/main/Interp-example.png" width="400" >
 </p>
 
+## Clolab notebook
+You can try our method and use it to see the itreptability of any polybenzenoid hydrocarbons (PBHs) molecule - [Colab](https://colab.research.google.com/drive/1UKiHOg17C9m9xoJRQM6qJDy-61HzlzU_?usp=sharing).  
+
 ## Setup
 1. Clone this repository by invoking
 ```
